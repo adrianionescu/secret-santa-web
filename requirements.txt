@@ -1,22 +1,22 @@
-Let's build together a web application with the following high level technologies:
-
-* frontend should be Angular
-* backend anything you want, as long as it's TypeScript based
-* APIs should be gRPC
-* DB should be postgresql
-
-The application takes a list of names and randomly creates pairs of two names.
+Let's build together a web application called "Secret Santa" which takes a list of names and randomly creates pairs of two names.
 The pairing process is called a Session and has a name and the creation date. 
+
+Technical requirements:
+* frontend should be Angular
+* backend should be Node.js and you can pick the framework as long as it's modern and well-documented
+* DB should be nosql
+* APIs should be gRPC
+* the backend and frontend will be deployed to my personal GCP account and store in a Firestore DB
+* organize the codebase as a monorepo but backend and frontend will be deployed as separate services
+* when changes are brought to the main branch, the CI/CD should be triggered and the application deployed in GCP
 
 Functional requirements:
 * the name field is the unique identifier of a Session
 * each name in a Session must be unique
 * a Session must not contain a pair that already exists in the previous Session
-
-Technical requirements:
-* connection to the local DB is done on localhost with the username "postgres" and the password "pw123"
 * generating the pairs and the Session objects is done in the backend, not he frontend
 * the pairs should be simply stored in a string field of the Session entity; ensure that the pairs can be parsed to be displayed in a user friendly way in the UX
+* generate the required .gitignore file
 
 UX requirements:
 * Top section:
