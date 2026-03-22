@@ -1,0 +1,33 @@
+Let's build together a web application with the following high level technologies:
+
+* frontend should be Angular
+* backend anything you want, as long as it's TypeScript based
+* APIs should be gRPC
+* DB should be postgresql
+
+The application takes a list of names and randomly creates pairs of two names.
+The pairing process is called a Session and has a name and the creation date. 
+
+Functional requirements:
+* the name field is the unique identifier of a Session
+* each name in a Session must be unique
+* a Session must not contain a pair that already exists in the previous Session
+
+Technical requirements:
+* connection to the local DB is done on localhost with the username "postgres" and the password "pw123"
+* generating the pairs and the Session objects is done in the backend, not he frontend
+* the pairs should be simply stored in a string field of the Session entity; ensure that the pairs can be parsed to be displayed in a user friendly way in the UX
+
+UX requirements:
+* Top section:
+	* a set of input boxes, one per name, showing the names from the previous Session, if one exists
+	* each input box has an "X" button next to it allowing to removes the box
+	* a blank input box with a + button next to it allowing to add a new name to the list
+	* a "Generate Pairs" button to generate a new Session using the names above and display it to the user (don't store it in the DB yet)
+	* a "Save Session" button which asks the user for a name and then stores the Session in the DB
+
+* Bottom section:
+	* displays as plain text all Session entities in the DB, each in its own panel, ordered descending by creation date
+	* for each Session the name and created_at fields should be displayed
+	
+When saving a new Session in the DB make sure to refresh the bottom panel so that it it also displayed there.
