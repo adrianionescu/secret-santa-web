@@ -22,7 +22,7 @@ Prerequisites: Docker, VS Code with the [Dev Containers](https://marketplace.vis
    pnpm run dev:web       # http://localhost:4200
    ```
 
-MongoDB is reachable at `mongodb://localhost:27017` from inside the container (the app shares the db container's network namespace).
+MongoDB is reachable at `mongodb://db:27017` from inside the container.
 
 ---
 

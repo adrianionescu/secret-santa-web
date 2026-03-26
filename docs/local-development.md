@@ -73,9 +73,12 @@ Open `http://localhost:4200` in your browser. The Angular dev server proxies not
 The API reads its configuration from a `.env.development` file at the workspace root:
 
 ```env
-DB_PROVIDER=mongo
-MONGO_URI=mongodb://localhost:27017/secretsanta
 PORT=3000
+DB_PROVIDER=mongo
+# when running in devcontainers
+MONGO_URI=mongodb://db:27017/secretsanta
+# when running directly on local machine
+# MONGO_URI=mongodb://localhost:27017/secretsanta
 ```
 
 Copy `.env.production.example` as a reference for production values.
