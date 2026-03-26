@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,8 +13,7 @@ export interface Pair {
 @Injectable({ providedIn: 'root' })
 export class SessionService {
   private readonly base = `${environment.apiUrl}/sessions`;
-
-  constructor(private readonly http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   generatePairs(participants: string[]): Observable<{ pairs: string; participants: string[] }> {
     return this.http.post<{ pairs: string; participants: string[] }>(

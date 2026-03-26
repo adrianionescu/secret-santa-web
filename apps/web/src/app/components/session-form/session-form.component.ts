@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SessionService, Pair } from '../../services/session.service';
@@ -14,6 +14,8 @@ import { SessionModel } from '@secret-santa/shared';
 export class SessionFormComponent implements OnInit {
   @Output() sessionSaved = new EventEmitter<SessionModel>();
 
+  private readonly sessionService = inject(SessionService);
+
   names: string[] = [''];
   newName = '';
   generatedPairs: Pair[] | null = null;
@@ -25,8 +27,6 @@ export class SessionFormComponent implements OnInit {
   showSavePrompt = false;
   error = '';
 
-  constructor(private sessionService: SessionService) {}
-
   ngOnInit() {
     // Pre-fill names from the most recent session
     this.sessionService.getLatestSession().subscribe({
@@ -35,7 +35,7 @@ export class SessionFormComponent implements OnInit {
           this.names = [...session.participants];
         }
       },
-      error: () => {} // ignore errors on initial load
+      error: () => { /* ignore errors on initial load */ }
     });
   }
 

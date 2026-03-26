@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SessionService, Pair } from '../../services/session.service';
 import { SessionModel } from '@secret-santa/shared';
@@ -11,11 +11,12 @@ import { SessionModel } from '@secret-santa/shared';
   styleUrls: ['./session-list.component.css'],
 })
 export class SessionListComponent implements OnInit {
+  private readonly sessionService = inject(SessionService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
   sessions: SessionModel[] = [];
   loading = false;
   error = '';
-
-  constructor(private sessionService: SessionService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.load(); 
