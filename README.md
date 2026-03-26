@@ -45,6 +45,8 @@ Prerequisites: Node.js 24.x, pnpm 10.x, Docker (for MongoDB).
    PORT=3000
    ```
 
+   See `.env.production.example` as a reference for production values.
+
 3. Install dependencies:
    ```bash
    pnpm install

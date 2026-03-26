@@ -46,14 +46,7 @@ pnpm nx affected -t test
 
 ## Local environment variables (`.env.development`)
 
-```env
-DB_PROVIDER=mongo
-# when running in devcontainers
-MONGO_URI=mongodb://db:27017/secretsanta
-# when running directly on local machine
-# MONGO_URI=mongodb://localhost:27017/secretsanta
-PORT=3000
-```
+See README.md
 
 ## Debugging
 

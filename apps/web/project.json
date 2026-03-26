@@ -20,6 +20,7 @@
             "input": "apps/web/public"
           }
         ],
+        "polyfills": ["zone.js"],
         "styles": ["apps/web/src/styles.css"]
       },
       "configurations": {

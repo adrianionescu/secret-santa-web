@@ -16,7 +16,7 @@ export class SessionFormComponent implements OnInit {
 
   private readonly sessionService = inject(SessionService);
 
-  names: string[] = [''];
+  names: string[] = [];
   newName = '';
   generatedPairs: Pair[] | null = null;
   generatedPairsJson = '';

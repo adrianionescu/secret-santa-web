@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SessionService, Pair } from '../../services/session.service';
 import { SessionModel } from '@secret-santa/shared';
@@ -12,7 +12,6 @@ import { SessionModel } from '@secret-santa/shared';
 })
 export class SessionListComponent implements OnInit {
   private readonly sessionService = inject(SessionService);
-  private readonly cdr = inject(ChangeDetectorRef);
 
   sessions: SessionModel[] = [];
   loading = false;
@@ -28,12 +27,10 @@ export class SessionListComponent implements OnInit {
       next: (sessions) => {
         this.sessions = sessions;
         this.loading = false;
-        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = err.message || 'Failed to load sessions.';
         this.loading = false;
-        this.cdr.detectChanges();
       }
     });
   }

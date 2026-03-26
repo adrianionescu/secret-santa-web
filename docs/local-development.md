@@ -23,13 +23,7 @@ pnpm install
 
 ### 2. Start MongoDB
 
-The dev container starts MongoDB automatically via Docker Compose. If you're running outside the dev container:
-
-```bash
-docker compose -f .devcontainer/docker-compose.yml up db -d
-```
-
-MongoDB will be available at `mongodb://localhost:27017`.
+The dev container starts MongoDB automatically via Docker Compose. If you're running outside the dev container, see README.md for details.
 
 ---
 
@@ -62,18 +56,7 @@ Open `http://localhost:4200` in your browser. The Angular dev server proxies not
 
 ## Environment Variables
 
-The API reads its configuration from a `.env.development` file at the workspace root:
-
-```env
-PORT=3000
-DB_PROVIDER=mongo
-# when running in devcontainers
-MONGO_URI=mongodb://db:27017/secretsanta
-# when running directly on local machine
-# MONGO_URI=mongodb://localhost:27017/secretsanta
-```
-
-Copy `.env.production.example` as a reference for production values.
+The API reads its configuration from a `.env.development` file at the workspace root. See README.md for details.
 
 ---
 
