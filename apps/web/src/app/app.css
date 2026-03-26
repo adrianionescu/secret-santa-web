@@ -1,0 +1,14 @@
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.app-header {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 0 0 8px 8px;
+  margin-bottom: 24px;
+}
+.app-header h1 { margin: 0; font-size: 28px; }
+.top-section { margin-bottom: 32px; }

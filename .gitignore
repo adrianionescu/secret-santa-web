@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+tmp/
+out-tsc/
+
+# Nx cache
+.nx/cache
+.nx/workspace-data
+
+# Environment files (never commit secrets)
+.env
+.env.*
+!.env.*.example
+
+# Angular
+.angular/cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Generated proto code (regenerated from proto files at build time)
+libs/proto/src/gen/
+
+# Docker
+.dockerignore
+
+# GCP credentials
+*-credentials.json
+service-account-key.json

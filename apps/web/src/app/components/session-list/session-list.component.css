@@ -1,0 +1,26 @@
+.session-list { padding: 24px; }
+.loading, .empty { color: #888; text-align: center; padding: 20px; }
+.error-msg { color: #ff4d4f; }
+.session-panel {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.session-name { font-size: 18px; font-weight: 600; color: #1890ff; }
+.session-date { font-size: 13px; color: #888; }
+.pair-item {
+  padding: 6px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.pair-item:last-child { border-bottom: none; }

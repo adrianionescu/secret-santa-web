@@ -1,0 +1,19 @@
+<div class="session-list">
+  <h2>Past Sessions</h2>
+  <div *ngIf="loading" class="loading">Loading sessions...</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+  <div *ngIf="!loading && sessions.length === 0 && !error" class="empty">
+    No sessions yet. Generate and save your first session above!
+  </div>
+  <div class="session-panel" *ngFor="let session of sessions">
+    <div class="session-header">
+      <span class="session-name">{{ session.name }}</span>
+      <span class="session-date">{{ formatDate(session.createdAt) }}</span>
+    </div>
+    <div class="session-pairs">
+      <div class="pair-item" *ngFor="let pair of parsePairs(session.pairs)">
+        <strong>{{ pair.giver }}</strong> → {{ pair.receiver }}
+      </div>
+    </div>
+  </div>
+</div>

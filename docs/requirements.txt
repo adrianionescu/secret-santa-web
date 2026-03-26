@@ -6,15 +6,16 @@ Technical requirements:
 * backend should be Node.js and you can pick the framework as long as it's modern and well-documented
 * DB should be nosql
 * APIs should be gRPC
-* the backend and frontend will be deployed to my personal GCP account and store in a Firestore DB
+* the backend and frontend will be deployed to my personal GCP account
+* the data will be stored locally in a mongodb and in GCP in Firestore
 * organize the codebase as a monorepo but backend and frontend will be deployed as separate services
-* when changes are brought to the main branch, the CI/CD should be triggered and the application deployed in GCP
+* when changes are brought to the main branch, the CI/CD should be triggered and the services deployed in GCP
 
 Functional requirements:
 * the name field is the unique identifier of a Session
 * each name in a Session must be unique
 * a Session must not contain a pair that already exists in the previous Session
-* generating the pairs and the Session objects is done in the backend, not he frontend
+* generating the pairs and the Session objects is done in the backend service, not he frontend
 * the pairs should be simply stored in a string field of the Session entity; ensure that the pairs can be parsed to be displayed in a user friendly way in the UX
 * generate the required .gitignore file
 

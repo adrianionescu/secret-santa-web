@@ -1,0 +1,94 @@
+.session-form {
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.names-list { margin-bottom: 12px; }
+.name-row, .add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.btn-remove {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.btn-add {
+  background: #52c41a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+.btn-primary {
+  background: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.btn-primary:disabled { background: #91d5ff; cursor: not-allowed; }
+.btn-secondary {
+  background: #fff;
+  color: #1890ff;
+  border: 1px solid #1890ff;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+.error-msg { color: #ff4d4f; font-size: 13px; margin: 8px 0; }
+.generated-pairs {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 4px;
+}
+.generated-pairs h3 { margin: 0 0 12px; color: #52c41a; }
+.generated-pairs ul { list-style: none; padding: 0; margin: 0; }
+.generated-pairs li { padding: 6px 0; border-bottom: 1px solid #d9f7be; }
+.generated-pairs li:last-child { border-bottom: none; }
+.save-prompt {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.save-dialog {
+  background: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  min-width: 320px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.save-dialog h3 { margin: 0 0 16px; }
+.save-actions { display: flex; gap: 12px; margin-top: 16px; }
