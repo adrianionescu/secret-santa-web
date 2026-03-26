@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SessionFormComponent } from './components/session-form/session-form.component';
 import { SessionListComponent } from './components/session-list/session-list.component';
-import { Session } from '@secret-santa/proto';
+import { SessionModel } from '@secret-santa/shared';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import { Session } from '@secret-santa/proto';
 export class AppComponent {
   @ViewChild(SessionListComponent) sessionList!: SessionListComponent;
 
-  onSessionSaved(_session: Session) {
+  onSessionSaved(_session: SessionModel) {
     // Refresh the sessions list when a new session is saved
     if (this.sessionList) {
       this.sessionList.load();

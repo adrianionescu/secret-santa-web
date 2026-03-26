@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SessionService, Pair } from '../../services/session.service';
-import { Session } from '@secret-santa/proto';
+import { SessionModel } from '@secret-santa/shared';
 
 @Component({
   selector: 'app-session-form',
@@ -12,7 +12,7 @@ import { Session } from '@secret-santa/proto';
   styleUrls: ['./session-form.component.css'],
 })
 export class SessionFormComponent implements OnInit {
-  @Output() sessionSaved = new EventEmitter<Session>();
+  @Output() sessionSaved = new EventEmitter<SessionModel>();
 
   names: string[] = [''];
   newName = '';

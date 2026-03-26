@@ -2,7 +2,6 @@ packages:
   - 'apps/*'
   - 'libs/*'
 onlyBuiltDependencies:
-  - '@bufbuild/buf'
   - '@nestjs/core'
   - '@parcel/watcher'
   - '@swc/core'
@@ -11,5 +10,4 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - nx
-  - protobufjs
   - unrs-resolver

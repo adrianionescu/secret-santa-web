@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SessionService, Pair } from '../../services/session.service';
-import { Session } from '@secret-santa/proto';
+import { SessionModel } from '@secret-santa/shared';
 
 @Component({
   selector: 'app-session-list',
@@ -11,7 +11,7 @@ import { Session } from '@secret-santa/proto';
   styleUrls: ['./session-list.component.css'],
 })
 export class SessionListComponent implements OnInit {
-  sessions: Session[] = [];
+  sessions: SessionModel[] = [];
   loading = false;
   error = '';
 

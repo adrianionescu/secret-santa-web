@@ -15,9 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@secret-santa/proto": ["libs/proto/src/index.ts"],
       "@secret-santa/shared": ["libs/shared/src/index.ts"],
-      "proto": ["libs/proto/src/index.ts"],
       "shared": ["libs/shared/src/index.ts"]
     }
   },

@@ -21,15 +21,7 @@
 pnpm install
 ```
 
-### 2. Generate proto types
-
-The TypeScript types used by both the API and the frontend are generated from the `.proto` file. Run this once after cloning, and again whenever `proto/secretsanta/v1/session.proto` changes:
-
-```bash
-pnpm run proto:gen
-```
-
-### 3. Start MongoDB
+### 2. Start MongoDB
 
 The dev container starts MongoDB automatically via Docker Compose. If you're running outside the dev container:
 
@@ -159,12 +151,14 @@ Angular runs in the browser, so debugging happens in **Chrome DevTools** or via 
 
 Or use the VS Code **"Debug Web"** launch configuration (attaches to Chrome on port 4200).
 
-### Inspecting ConnectRPC calls
+### Inspecting REST API calls
 
-ConnectRPC uses standard HTTP POST requests, so you can inspect them in:
-- Chrome DevTools → **Network** tab → filter by `XHR` or `Fetch`
-- Each gRPC method maps to a URL like `http://localhost:3000/secretsanta.v1.SessionService/ListSessions`
-- Request/response bodies are binary (protobuf) by default; switch to JSON by setting the `Accept` header or using ConnectRPC's JSON mode
+API calls can be inspected in Chrome DevTools → **Network** tab → filter by `Fetch/XHR`. The REST endpoints are:
+
+- `GET  /sessions` — list all sessions
+- `GET  /sessions/latest` — get the most recent session
+- `POST /sessions/generate-pairs` — generate pairs (not saved)
+- `POST /sessions` — save a session
 
 ---
 
@@ -193,15 +187,13 @@ pnpm nx affected -t test
 ```
 apps/backend/src/
   session/session.service.ts     ← pair generation & business logic
+  session/session.controller.ts  ← REST API endpoints
   repository/                    ← MongoDB and Firestore adapters
-  connect/connect.middleware.ts  ← ConnectRPC ↔ NestJS bridge
 
 apps/web/src/app/
-  services/session.service.ts                        ← gRPC client calls
+  services/session.service.ts                        ← REST client (HttpClient)
   components/session-form/session-form.component.ts  ← top UX section
   components/session-list/session-list.component.ts  ← bottom UX section
 
-proto/secretsanta/v1/session.proto  ← API contract (edit here, then re-run proto-gen)
-libs/proto/src/gen/                 ← generated types (do not edit)
 libs/shared/src/lib/               ← ISessionRepository, SessionModel, Pair
 ```

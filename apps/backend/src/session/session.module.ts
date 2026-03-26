@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { SessionConnectHandler } from './session-connect.handler';
+import { SessionController } from './session.controller';
 
 @Module({
-  providers: [SessionService, SessionConnectHandler],
-  exports: [SessionConnectHandler],
+  controllers: [SessionController],
+  providers: [SessionService],
 })
 export class SessionModule {}

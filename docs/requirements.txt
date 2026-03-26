@@ -5,7 +5,7 @@ Technical requirements:
 * frontend should be Angular
 * backend should be Node.js and you can pick the framework as long as it's modern and well-documented
 * DB should be nosql
-* APIs should be gRPC
+* APIs should be REST
 * the backend and frontend will be deployed to my personal GCP account
 * the data will be stored locally in a mongodb and in GCP in Firestore
 * organize the codebase as a monorepo but backend and frontend will be deployed as separate services
