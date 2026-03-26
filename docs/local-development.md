@@ -70,7 +70,7 @@ Open `http://localhost:4200` in your browser. The Angular dev server proxies not
 
 ## Environment Variables
 
-The API reads its configuration from a `.env.development` file at the workspace root (already created):
+The API reads its configuration from a `.env.development` file at the workspace root:
 
 ```env
 DB_PROVIDER=mongo
@@ -86,7 +86,7 @@ Copy `.env.production.example` as a reference for production values.
 
 ```bash
 # Run all tests
-pnpm nx run-many -t test
+pnpm test
 
 # Run tests for a specific project
 pnpm nx test backend
@@ -102,7 +102,7 @@ pnpm nx test backend --watch
 
 ```bash
 # Lint all projects
-pnpm nx run-many -t lint
+pnpm lint
 
 # Lint a specific project
 pnpm nx lint backend
@@ -114,8 +114,8 @@ pnpm nx lint web
 ## Building for Production
 
 ```bash
-# Build both services
-pnpm nx run-many -t build --projects=backend,web
+# Build all
+pnpm build
 
 # Build individually
 pnpm nx build backend
