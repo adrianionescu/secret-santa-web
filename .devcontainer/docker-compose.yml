@@ -21,8 +21,7 @@ services:
     image: mongo:latest
     restart: unless-stopped
     volumes:
-      - mongodb-data:/data/db      
-      - D:\Workspace\_data\mongodb-data:/data/db
+      - mongodb-data:/data/db
 
     # Uncomment to change startup options
     # environment:

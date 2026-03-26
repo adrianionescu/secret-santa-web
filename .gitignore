@@ -50,6 +50,7 @@ libs/proto/src/gen/
 
 # Docker
 .dockerignore
+.devcontainer/docker-compose.override.yml
 
 # GCP credentials
 *-credentials.json

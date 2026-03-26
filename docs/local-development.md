@@ -26,7 +26,7 @@ pnpm install
 The TypeScript types used by both the API and the frontend are generated from the `.proto` file. Run this once after cloning, and again whenever `proto/secretsanta/v1/session.proto` changes:
 
 ```bash
-pnpm nx run proto:proto-gen
+pnpm run proto:gen
 ```
 
 ### 3. Start MongoDB
@@ -48,7 +48,7 @@ Open two terminals and run the backend and frontend in parallel.
 ### Backend (API — port 3000)
 
 ```bash
-pnpm nx serve backend
+pnpm run dev:backend
 ```
 
 The API starts on `http://localhost:3000`. Test it is running:
@@ -61,7 +61,7 @@ curl http://localhost:3000/health
 ### Frontend (port 4200)
 
 ```bash
-pnpm nx serve web
+pnpm run dev:web
 ```
 
 Open `http://localhost:4200` in your browser. The Angular dev server proxies nothing — it calls the API at `http://localhost:3000` directly.
@@ -133,7 +133,7 @@ Output goes to `dist/apps/backend/` and `dist/apps/web/`.
 A launch configuration is provided in `.vscode/launch.json`. In VS Code:
 
 1. Press `F5` or open the **Run and Debug** panel
-2. Select **"Debug API"**
+2. Select **"Debug backend with Nx"**
 3. The API starts with `--inspect`, and VS Code attaches automatically
 
 You can set breakpoints in any file under `apps/backend/src/`.
