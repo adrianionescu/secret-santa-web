@@ -36,6 +36,14 @@ export class MongoSessionRepository implements ISessionRepository {
     return count > 0;
   }
 
+  async deleteByName(name: string): Promise<void> {
+    await this.sessionModel.deleteOne({ name }).exec();
+  }
+
+  async deleteAll(): Promise<void> {
+    await this.sessionModel.deleteMany({}).exec();
+  }
+
   private toModel(doc: SessionDocument): SessionModel {
     return {
       name: doc.name,

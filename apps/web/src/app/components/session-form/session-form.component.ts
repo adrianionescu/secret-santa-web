@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SessionService, Pair } from '../../services/session.service';
-import { Session } from '@secret-santa/proto';
+import { SessionService } from '../../services/session.service';
+import { Pair, SessionModel } from '@secret-santa/shared';
 
 @Component({
   selector: 'app-session-form',
@@ -12,9 +12,11 @@ import { Session } from '@secret-santa/proto';
   styleUrls: ['./session-form.component.css'],
 })
 export class SessionFormComponent implements OnInit {
-  @Output() sessionSaved = new EventEmitter<Session>();
+  @Output() sessionSaved = new EventEmitter<SessionModel>();
 
-  names: string[] = [''];
+  private readonly sessionService = inject(SessionService);
+
+  names: string[] = [];
   newName = '';
   generatedPairs: Pair[] | null = null;
   generatedPairsJson = '';
@@ -25,8 +27,6 @@ export class SessionFormComponent implements OnInit {
   showSavePrompt = false;
   error = '';
 
-  constructor(private sessionService: SessionService) {}
-
   ngOnInit() {
     // Pre-fill names from the most recent session
     this.sessionService.getLatestSession().subscribe({
@@ -35,7 +35,7 @@ export class SessionFormComponent implements OnInit {
           this.names = [...session.participants];
         }
       },
-      error: () => {} // ignore errors on initial load
+      error: () => { /* ignore errors on initial load */ }
     });
   }
 

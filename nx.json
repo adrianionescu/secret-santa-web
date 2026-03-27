@@ -60,11 +60,6 @@
         "{workspaceRoot}/eslint.config.js"
       ]
     },
-    "proto-gen": {
-      "cache": true,
-      "inputs": ["{workspaceRoot}/proto/**/*.proto"],
-      "outputs": ["{workspaceRoot}/libs/proto/src/gen/**"]
-    },
     "@angular-devkit/build-angular:browser": {
       "cache": true,
       "dependsOn": ["^build"],

@@ -4,7 +4,6 @@
   "files": [],
   "include": [],
   "references": [
-    { "path": "./libs/proto" },
     { "path": "./libs/shared" },
     { "path": "./apps/backend" },
     { "path": "./apps/web" }

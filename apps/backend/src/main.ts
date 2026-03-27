@@ -6,16 +6,10 @@ async function bootstrap() {
   app.enableCors({
     origin: ['http://localhost:4200', process.env.FRONTEND_URL].filter(Boolean),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'content-type',
-      'connect-protocol-version',
-      'x-grpc-web',
-      'grpc-timeout',
-      'x-user-agent',
-    ],
+    allowedHeaders: ['content-type'],
   });
   const port = process.env.PORT ?? 3000;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log(`API running on port ${port}`);
 }
 

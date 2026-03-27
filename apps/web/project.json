@@ -20,6 +20,7 @@
             "input": "apps/web/public"
           }
         ],
+        "polyfills": ["zone.js"],
         "styles": ["apps/web/src/styles.css"]
       },
       "configurations": {
@@ -58,6 +59,9 @@
     "serve": {
       "continuous": true,
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "host": "0.0.0.0"
+      },
       "configurations": {
         "production": {
           "buildTarget": "web:build:production"

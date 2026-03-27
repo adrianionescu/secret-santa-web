@@ -21,23 +21,9 @@
 pnpm install
 ```
 
-### 2. Generate proto types
+### 2. Start MongoDB
 
-The TypeScript types used by both the API and the frontend are generated from the `.proto` file. Run this once after cloning, and again whenever `proto/secretsanta/v1/session.proto` changes:
-
-```bash
-pnpm nx run proto:proto-gen
-```
-
-### 3. Start MongoDB
-
-The dev container starts MongoDB automatically via Docker Compose. If you're running outside the dev container:
-
-```bash
-docker compose -f .devcontainer/docker-compose.yml up db -d
-```
-
-MongoDB will be available at `mongodb://localhost:27017`.
+The dev container starts MongoDB automatically via Docker Compose. If you're running outside the dev container, see README.md for details.
 
 ---
 
@@ -48,7 +34,7 @@ Open two terminals and run the backend and frontend in parallel.
 ### Backend (API — port 3000)
 
 ```bash
-pnpm nx serve backend
+pnpm run dev:backend
 ```
 
 The API starts on `http://localhost:3000`. Test it is running:
@@ -61,7 +47,7 @@ curl http://localhost:3000/health
 ### Frontend (port 4200)
 
 ```bash
-pnpm nx serve web
+pnpm run dev:web
 ```
 
 Open `http://localhost:4200` in your browser. The Angular dev server proxies nothing — it calls the API at `http://localhost:3000` directly.
@@ -70,15 +56,7 @@ Open `http://localhost:4200` in your browser. The Angular dev server proxies not
 
 ## Environment Variables
 
-The API reads its configuration from a `.env.development` file at the workspace root (already created):
-
-```env
-DB_PROVIDER=mongo
-MONGO_URI=mongodb://localhost:27017/secretsanta
-PORT=3000
-```
-
-Copy `.env.production.example` as a reference for production values.
+The API reads its configuration from a `.env.development` file at the workspace root. See README.md for details.
 
 ---
 
@@ -86,7 +64,7 @@ Copy `.env.production.example` as a reference for production values.
 
 ```bash
 # Run all tests
-pnpm nx run-many -t test
+pnpm test
 
 # Run tests for a specific project
 pnpm nx test backend
@@ -102,7 +80,7 @@ pnpm nx test backend --watch
 
 ```bash
 # Lint all projects
-pnpm nx run-many -t lint
+pnpm lint
 
 # Lint a specific project
 pnpm nx lint backend
@@ -114,8 +92,8 @@ pnpm nx lint web
 ## Building for Production
 
 ```bash
-# Build both services
-pnpm nx run-many -t build --projects=backend,web
+# Build all
+pnpm build
 
 # Build individually
 pnpm nx build backend
@@ -133,7 +111,7 @@ Output goes to `dist/apps/backend/` and `dist/apps/web/`.
 A launch configuration is provided in `.vscode/launch.json`. In VS Code:
 
 1. Press `F5` or open the **Run and Debug** panel
-2. Select **"Debug API"**
+2. Select **"Debug backend with Nx"**
 3. The API starts with `--inspect`, and VS Code attaches automatically
 
 You can set breakpoints in any file under `apps/backend/src/`.
@@ -156,12 +134,14 @@ Angular runs in the browser, so debugging happens in **Chrome DevTools** or via 
 
 Or use the VS Code **"Debug Web"** launch configuration (attaches to Chrome on port 4200).
 
-### Inspecting ConnectRPC calls
+### Inspecting REST API calls
 
-ConnectRPC uses standard HTTP POST requests, so you can inspect them in:
-- Chrome DevTools → **Network** tab → filter by `XHR` or `Fetch`
-- Each gRPC method maps to a URL like `http://localhost:3000/secretsanta.v1.SessionService/ListSessions`
-- Request/response bodies are binary (protobuf) by default; switch to JSON by setting the `Accept` header or using ConnectRPC's JSON mode
+API calls can be inspected in Chrome DevTools → **Network** tab → filter by `Fetch/XHR`. The REST endpoints are:
+
+- `GET  /sessions` — list all sessions
+- `GET  /sessions/latest` — get the most recent session
+- `POST /sessions/generate-pairs` — generate pairs (not saved)
+- `POST /sessions` — save a session
 
 ---
 
@@ -190,15 +170,13 @@ pnpm nx affected -t test
 ```
 apps/backend/src/
   session/session.service.ts     ← pair generation & business logic
+  session/session.controller.ts  ← REST API endpoints
   repository/                    ← MongoDB and Firestore adapters
-  connect/connect.middleware.ts  ← ConnectRPC ↔ NestJS bridge
 
 apps/web/src/app/
-  services/session.service.ts                        ← gRPC client calls
+  services/session.service.ts                        ← REST client (HttpClient)
   components/session-form/session-form.component.ts  ← top UX section
   components/session-list/session-list.component.ts  ← bottom UX section
 
-proto/secretsanta/v1/session.proto  ← API contract (edit here, then re-run proto-gen)
-libs/proto/src/gen/                 ← generated types (do not edit)
 libs/shared/src/lib/               ← ISessionRepository, SessionModel, Pair
 ```

@@ -1,48 +1,42 @@
-import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { createClient } from '@connectrpc/connect';
-import { createConnectTransport } from '@connectrpc/connect-web';
-import {
-  SessionService as SessionServiceDef,
-  Session,
-} from '@secret-santa/proto';
+import { Pair, SessionModel } from '@secret-santa/shared';
 import { environment } from '../../environments/environment';
-
-export interface Pair {
-  giver: string;
-  receiver: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
-  private readonly client = createClient(
-    SessionServiceDef,
-    createConnectTransport({ baseUrl: environment.apiUrl })
-  );
+  private readonly base = `${environment.apiUrl}/sessions`;
+  private readonly http = inject(HttpClient);
 
   generatePairs(participants: string[]): Observable<{ pairs: string; participants: string[] }> {
-    return from(this.client.generatePairs({ participants })).pipe(
-      map(res => ({ pairs: res.pairs, participants: res.participants as string[] }))
+    return this.http.post<{ pairs: string; participants: string[] }>(
+      `${this.base}/generate-pairs`,
+      { participants }
     );
   }
 
-  saveSession(name: string, participants: string[], pairs: string): Observable<Session> {
-    return from(this.client.saveSession({ name, participants, pairs })).pipe(
-      map(res => res.session!)
+  saveSession(name: string, participants: string[], pairs: string, createdAt?: string): Observable<SessionModel> {
+    return this.http.post<SessionModel>(this.base, { name, participants, pairs, createdAt });
+  }
+
+  listSessions(): Observable<SessionModel[]> {
+    return this.http.get<SessionModel[]>(this.base);
+  }
+
+  getLatestSession(): Observable<SessionModel | null> {
+    return this.http.get<{ session: SessionModel | null; found: boolean }>(`${this.base}/latest`).pipe(
+      map(res => res.found ? res.session : null)
     );
   }
 
-  listSessions(): Observable<Session[]> {
-    return from(this.client.listSessions({})).pipe(
-      map(res => res.sessions as Session[])
-    );
+  deleteSession(name: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${encodeURIComponent(name)}`);
   }
 
-  getLatestSession(): Observable<Session | null> {
-    return from(this.client.getLatestSession({})).pipe(
-      map(res => (res.found && res.session) ? res.session : null)
-    );
+  deleteAllSessions(): Observable<void> {
+    return this.http.delete<void>(this.base);
   }
 
   parsePairs(pairsJson: string): Pair[] {

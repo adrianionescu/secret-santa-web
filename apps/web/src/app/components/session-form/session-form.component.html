@@ -2,15 +2,17 @@
   <h2>Participants</h2>
 
   <div class="names-list">
-    <div class="name-row" *ngFor="let name of names; let i = index; trackBy: trackByIndex">
-      <input
-        type="text"
-        [(ngModel)]="names[i]"
-        placeholder="Enter name"
-        class="name-input"
-      />
-      <button class="btn-remove" (click)="removeName(i)" title="Remove">✕</button>
-    </div>
+    @for (name of names; track $index; let i = $index) {
+      <div class="name-row">
+        <input
+          type="text"
+          [(ngModel)]="names[i]"
+          placeholder="Enter name"
+          class="name-input"
+        />
+        <button class="btn-remove" (click)="removeName(i)" title="Remove">✕</button>
+      </div>
+    }
   </div>
 
   <div class="add-row">
@@ -24,7 +26,9 @@
     <button class="btn-add" (click)="addName()" title="Add">+</button>
   </div>
 
-  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  @if (error) {
+    <div class="error-msg">{{ error }}</div>
+  }
 
   <div class="actions">
     <button class="btn-primary" (click)="generatePairs()" [disabled]="generating">
@@ -35,32 +39,37 @@
     </button>
   </div>
 
-  <div class="generated-pairs" *ngIf="generatedPairs">
-    <h3>Generated Pairs (not saved yet)</h3>
-    <ul>
-      <li *ngFor="let pair of generatedPairs">
-        <strong>{{ pair.giver }}</strong> → {{ pair.receiver }}
-      </li>
-    </ul>
-  </div>
+  @if (generatedPairs) {
+    <div class="generated-pairs">
+      <h3>Generated Pairs (not saved yet)</h3>
+      <ul>
+        @for (pair of generatedPairs; track $index) {
+          <li>
+            <strong>{{ pair.giver }}</strong> → {{ pair.receiver }}
+          </li>
+        }
+      </ul>
+    </div>
+  }
 
-  <div class="save-prompt" *ngIf="showSavePrompt">
-    <div class="save-dialog">
-      <h3>Save Session</h3>
-      <input
-        type="text"
-        [(ngModel)]="sessionName"
-        placeholder="Session name (unique)"
-        class="name-input"
-        (keyup.enter)="saveSession()"
-        autofocus
-      />
-      <div class="save-actions">
-        <button class="btn-primary" (click)="saveSession()" [disabled]="saving">
-          {{ saving ? 'Saving...' : 'Save' }}
-        </button>
-        <button class="btn-secondary" (click)="cancelSave()">Cancel</button>
+  @if (showSavePrompt) {
+    <div class="save-prompt">
+      <div class="save-dialog">
+        <h3>Save Session</h3>
+        <input
+          type="text"
+          [(ngModel)]="sessionName"
+          placeholder="Session name (unique)"
+          class="name-input"
+          (keyup.enter)="saveSession()"
+        />
+        <div class="save-actions">
+          <button class="btn-primary" (click)="saveSession()" [disabled]="saving">
+            {{ saving ? 'Saving...' : 'Save' }}
+          </button>
+          <button class="btn-secondary" (click)="cancelSave()">Cancel</button>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

@@ -1,19 +1,80 @@
 <div class="session-list">
-  <h2>Past Sessions</h2>
-  <div *ngIf="loading" class="loading">Loading sessions...</div>
-  <div *ngIf="error" class="error-msg">{{ error }}</div>
-  <div *ngIf="!loading && sessions.length === 0 && !error" class="empty">
-    No sessions yet. Generate and save your first session above!
-  </div>
-  <div class="session-panel" *ngFor="let session of sessions">
-    <div class="session-header">
-      <span class="session-name">{{ session.name }}</span>
-      <span class="session-date">{{ formatDate(session.createdAt) }}</span>
+  <div class="list-header">
+    <h2>Past Sessions</h2>
+    <div class="list-actions">
+      <button class="btn-delete-all" (click)="deleteAllSessions()" [disabled]="sessions.length === 0" title="Delete all sessions">Delete All</button>
+      <button class="btn-export-all" (click)="exportAllSessions()" [disabled]="sessions.length === 0" title="Export all sessions">Export All</button>
+      <label class="btn-import" title="Import sessions from file">
+        Import
+        <input type="file" accept=".txt" (change)="onFileSelected($event)" hidden>
+      </label>
     </div>
-    <div class="session-pairs">
-      <div class="pair-item" *ngFor="let pair of parsePairs(session.pairs)">
-        <strong>{{ pair.giver }}</strong> → {{ pair.receiver }}
+  </div>
+  @if (loading) {
+    <div class="loading">Loading sessions...</div>
+  }
+  @if (error) {
+    <div class="error-msg">{{ error }}</div>
+  }
+  @if (!loading && sessions.length === 0 && !error) {
+    <div class="empty">
+      No sessions yet. Generate and save your first session above!
+    </div>
+  }
+  @for (session of sessions; track session.name) {
+    <div class="session-panel">
+      <div class="session-header">
+        <span class="session-name">{{ session.name }}</span>
+        <span class="session-date">{{ formatDate(session.createdAt) }}</span>
+        <div class="session-actions">
+          <button class="btn-export" (click)="exportSession(session)" title="Export session">Export</button>
+          <button class="btn-delete" (click)="deleteSession(session.name)" title="Delete session">Delete</button>
+        </div>
+      </div>
+      <div class="session-pairs">
+        @for (pair of parsePairs(session.pairs); track $index) {
+          <div class="pair-item">
+            <span class="pair-names"><strong>{{ pair.giver }}</strong> → {{ pair.receiver }}</span>
+            <span class="pair-message">{{ formatMessage(pair) }}</span>
+            <button
+              class="btn-copy"
+              [class.copied]="copiedKey === session.name + $index"
+              (click)="copyMessage(pair, session.name + $index)"
+              title="Copy message">
+              {{ copiedKey === session.name + $index ? 'Copied!' : 'Copy' }}
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+@if (confirmDeleteAll) {
+  <div class="confirm-overlay">
+    <div class="confirm-dialog">
+      <h3>Delete all sessions?</h3>
+      <p>All <strong>{{ sessions.length }}</strong> sessions will be permanently deleted. This cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-confirm-delete" (click)="confirmDeleteAllSessions()">Delete All</button>
       </div>
     </div>
   </div>
-</div>
+}
+
+@if (confirmDeleteName) {
+  <div class="confirm-overlay">
+    <div class="confirm-dialog">
+      <h3>Delete session?</h3>
+      <p>
+        <strong>{{ confirmDeleteName }}</strong> will be permanently deleted.
+        This cannot be undone.
+      </p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-confirm-delete" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+}
