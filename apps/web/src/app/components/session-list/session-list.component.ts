@@ -16,9 +16,10 @@ export class SessionListComponent implements OnInit {
   sessions: SessionModel[] = [];
   loading = false;
   error = '';
+  confirmDeleteName: string | null = null;
 
   ngOnInit() {
-    this.load(); 
+    this.load();
   }
 
   load() {
@@ -36,10 +37,20 @@ export class SessionListComponent implements OnInit {
   }
 
   deleteSession(name: string) {
+    this.confirmDeleteName = name;
+  }
+
+  confirmDelete() {
+    const name = this.confirmDeleteName!;
+    this.confirmDeleteName = null;
     this.sessionService.deleteSession(name).subscribe({
       next: () => this.load(),
       error: (err) => { this.error = err.message || 'Failed to delete session.'; }
     });
+  }
+
+  cancelDelete() {
+    this.confirmDeleteName = null;
   }
 
   parsePairs(pairsJson: string): Pair[] {

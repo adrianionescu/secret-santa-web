@@ -28,3 +28,19 @@
     </div>
   }
 </div>
+
+@if (confirmDeleteName) {
+  <div class="confirm-overlay">
+    <div class="confirm-dialog">
+      <h3>Delete session?</h3>
+      <p>
+        <strong>{{ confirmDeleteName }}</strong> will be permanently deleted.
+        This cannot be undone.
+      </p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-confirm-delete" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+}

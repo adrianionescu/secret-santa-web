@@ -31,7 +31,7 @@ Prerequisites: Node.js 24.x, pnpm 10.x, Docker (for MongoDB).
 
 1. Start MongoDB:
    ```bash
-   docker compose -f .devcontainer/docker-compose.yml up db -d
+   docker compose -f .devcontainer/docker-compose.yml -f .devcontainer/docker-compose.override.yml up db -d
    ```
    MongoDB will be available at `mongodb://localhost:27017`.
 
