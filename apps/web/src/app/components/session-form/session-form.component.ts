@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SessionService, Pair } from '../../services/session.service';
-import { SessionModel } from '@secret-santa/shared';
+import { SessionService } from '../../services/session.service';
+import { Pair, SessionModel } from '@secret-santa/shared';
 
 @Component({
   selector: 'app-session-form',

@@ -68,6 +68,7 @@ export class SessionService {
     const prevSet = new Set(
       previousPairs.map((p) => `${p.giver}:${p.receiver}`),
     );
+    const idMap = this.generateUniqueIds(participants);
 
     for (let attempt = 0; attempt < 100; attempt++) {
       const receivers = [...participants];
@@ -80,6 +81,8 @@ export class SessionService {
       const pairs: Pair[] = participants.map((giver, i) => ({
         giver,
         receiver: receivers[i],
+        giverId: idMap.get(giver) as string,
+        receiverId: idMap.get(receivers[i]) as string,
       }));
 
       // Check: no self-pairing, no repeat from previous session
@@ -92,5 +95,17 @@ export class SessionService {
     }
 
     throw new Error('Could not generate valid pairs after 100 attempts');
+  }
+
+  private generateUniqueIds(participants: string[]): Map<string, string> {
+    const used = new Set<number>();
+    const map = new Map<string, string>();
+    for (const p of participants) {
+      let num: number;
+      do { num = 1000 + Math.floor(Math.random() * 9000); } while (used.has(num));
+      used.add(num);
+      map.set(p, String(num));
+    }
+    return map;
   }
 }

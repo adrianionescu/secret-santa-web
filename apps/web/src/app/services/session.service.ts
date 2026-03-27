@@ -2,13 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SessionModel } from '@secret-santa/shared';
+import { Pair, SessionModel } from '@secret-santa/shared';
 import { environment } from '../../environments/environment';
-
-export interface Pair {
-  giver: string;
-  receiver: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {

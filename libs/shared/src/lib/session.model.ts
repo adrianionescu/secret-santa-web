@@ -1,6 +1,8 @@
 export interface Pair {
   giver: string;
   receiver: string;
+  giverId: string;
+  receiverId: string;
 }
 
 export interface SessionModel {
