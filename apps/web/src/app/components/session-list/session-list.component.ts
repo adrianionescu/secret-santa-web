@@ -28,9 +28,7 @@ export class SessionListComponent implements OnInit {
     this.loading = true;
     this.sessionService.listSessions().subscribe({
       next: (sessions) => {
-        this.sessions = sessions.sort((a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        this.sessions = sessions;
         this.loading = false;
       },
       error: (err) => {
