@@ -73,7 +73,7 @@ export class SessionService {
     const prevSet = new Set(
       previousPairs.map((p) => `${p.giver}:${p.receiver}`),
     );
-    const idMap = this.generateUniqueIds(participants);
+    const idMap = this.generateUniqueIds(participants, previousPairs);
 
     for (let attempt = 0; attempt < 100; attempt++) {
       const receivers = [...participants];
@@ -102,14 +102,41 @@ export class SessionService {
     throw new Error('Could not generate valid pairs after 100 attempts');
   }
 
-  private generateUniqueIds(participants: string[]): Map<string, string> {
-    const used = new Set<number>();
+  private static readonly ANIMAL_IDS = [
+    'marmota', 'pisica', 'suricata', 'veverita', 'capybara',
+    'panda rosu', 'vulpe fennec', 'chinchilla', 'quokka', 'axolotl',
+  ];
+
+  private generateUniqueIds(participants: string[], previousPairs: Pair[]): Map<string, string> {
+    if (participants.length > SessionService.ANIMAL_IDS.length) {
+      throw new Error(
+        `Too many participants: maximum is ${SessionService.ANIMAL_IDS.length}.`,
+      );
+    }
+    const previousAnimal = new Map(previousPairs.map((p) => [p.giver, p.giverId]));
+
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const pool = [...SessionService.ANIMAL_IDS];
+      const map = new Map<string, string>();
+      let valid = true;
+
+      for (const p of participants) {
+        const available = pool.filter((a) => a !== previousAnimal.get(p));
+        if (available.length === 0) { valid = false; break; }
+        const animal = available[Math.floor(Math.random() * available.length)];
+        pool.splice(pool.indexOf(animal), 1);
+        map.set(p, animal);
+      }
+
+      if (valid) return map;
+    }
+
+    // Fallback: assign ignoring previous constraint rather than failing
+    const pool = [...SessionService.ANIMAL_IDS];
     const map = new Map<string, string>();
     for (const p of participants) {
-      let num: number;
-      do { num = 1000 + Math.floor(Math.random() * 9000); } while (used.has(num));
-      used.add(num);
-      map.set(p, String(num));
+      const index = Math.floor(Math.random() * pool.length);
+      map.set(p, pool.splice(index, 1)[0]);
     }
     return map;
   }

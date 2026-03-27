@@ -70,7 +70,7 @@ export class SessionListComponent implements OnInit {
   }
 
   formatMessage(pair: Pair): string {
-    return `Draga ${pair.giver} tu esti numarul ${pair.giverId} si oferi cadou numarului ${pair.receiverId}`;
+    return `Draga ${pair.giver} tu esti ${pair.giverId} si ai cadou pentru ${pair.receiverId}`;
   }
 
   copyMessage(pair: Pair, key: string) {
@@ -188,7 +188,7 @@ export class SessionListComponent implements OnInit {
     const participants = participantsLine.slice('Participants: '.length)
       .split(',').map(p => p.trim()).filter(p => p.length > 0);
 
-    const pairRegex = /^(.+) \((\d{4})\) -> (.+) \((\d{4})\)$/;
+    const pairRegex = /^(.+) \(([^)]+)\) -> (.+) \(([^)]+)\)$/;
     const pairs: Pair[] = [];
     for (const line of lines.slice(pairsStart + 1)) {
       if (!line) continue;
