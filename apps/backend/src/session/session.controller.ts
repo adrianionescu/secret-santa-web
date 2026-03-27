@@ -27,6 +27,11 @@ export class SessionController {
     return this.sessionService.saveSession(body.name, body.participants, body.pairs);
   }
 
+  @Delete()
+  deleteAllSessions() {
+    return this.sessionService.deleteAllSessions();
+  }
+
   @Delete(':name')
   deleteSession(@Param('name') name: string) {
     return this.sessionService.deleteSession(name);

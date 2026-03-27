@@ -6,6 +6,7 @@ export interface ISessionRepository {
   save(session: SessionModel): Promise<SessionModel>;
   existsByName(name: string): Promise<boolean>;
   deleteByName(name: string): Promise<void>;
+  deleteAll(): Promise<void>;
 }
 
 export const SESSION_REPOSITORY_TOKEN = Symbol('SESSION_REPOSITORY');

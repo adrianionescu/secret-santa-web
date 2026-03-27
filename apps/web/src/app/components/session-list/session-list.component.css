@@ -13,6 +13,17 @@
 }
 .btn-export-all:hover:not(:disabled) { border-color: #1890ff; color: #1890ff; }
 .btn-export-all:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-delete-all {
+  background: #fff;
+  color: #ff4d4f;
+  border: 1px solid #ff4d4f;
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn-delete-all:hover:not(:disabled) { background: #fff1f0; }
+.btn-delete-all:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-import {
   background: #fff;
   color: #1890ff;

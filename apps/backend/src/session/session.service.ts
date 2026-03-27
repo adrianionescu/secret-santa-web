@@ -39,6 +39,10 @@ export class SessionService {
     return this.sessionRepository.deleteByName(name);
   }
 
+  async deleteAllSessions(): Promise<void> {
+    return this.sessionRepository.deleteAll();
+  }
+
   async saveSession(
     name: string,
     participants: string[],

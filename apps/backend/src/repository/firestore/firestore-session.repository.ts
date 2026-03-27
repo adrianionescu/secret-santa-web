@@ -48,4 +48,11 @@ export class FirestoreSessionRepository implements ISessionRepository {
   async deleteByName(name: string): Promise<void> {
     await this.db.collection(this.collectionName).doc(name).delete();
   }
+
+  async deleteAll(): Promise<void> {
+    const snapshot = await this.db.collection(this.collectionName).get();
+    const batch = this.db.batch();
+    snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+    await batch.commit();
+  }
 }

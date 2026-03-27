@@ -2,6 +2,7 @@
   <div class="list-header">
     <h2>Past Sessions</h2>
     <div class="list-actions">
+      <button class="btn-delete-all" (click)="deleteAllSessions()" [disabled]="sessions.length === 0" title="Delete all sessions">Delete All</button>
       <button class="btn-export-all" (click)="exportAllSessions()" [disabled]="sessions.length === 0" title="Export all sessions">Export All</button>
       <label class="btn-import" title="Import sessions from file">
         Import
@@ -46,6 +47,19 @@
     </div>
   }
 </div>
+
+@if (confirmDeleteAll) {
+  <div class="confirm-overlay">
+    <div class="confirm-dialog">
+      <h3>Delete all sessions?</h3>
+      <p>All <strong>{{ sessions.length }}</strong> sessions will be permanently deleted. This cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-confirm-delete" (click)="confirmDeleteAllSessions()">Delete All</button>
+      </div>
+    </div>
+  </div>
+}
 
 @if (confirmDeleteName) {
   <div class="confirm-overlay">

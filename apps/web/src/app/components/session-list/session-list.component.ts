@@ -17,6 +17,7 @@ export class SessionListComponent implements OnInit {
   loading = false;
   error = '';
   confirmDeleteName: string | null = null;
+  confirmDeleteAll = false;
   copiedKey: string | null = null;
 
   ngOnInit() {
@@ -53,6 +54,19 @@ export class SessionListComponent implements OnInit {
 
   cancelDelete() {
     this.confirmDeleteName = null;
+    this.confirmDeleteAll = false;
+  }
+
+  deleteAllSessions() {
+    this.confirmDeleteAll = true;
+  }
+
+  confirmDeleteAllSessions() {
+    this.confirmDeleteAll = false;
+    this.sessionService.deleteAllSessions().subscribe({
+      next: () => this.load(),
+      error: (err) => { this.error = err.message || 'Failed to delete all sessions.'; }
+    });
   }
 
   formatMessage(pair: Pair): string {

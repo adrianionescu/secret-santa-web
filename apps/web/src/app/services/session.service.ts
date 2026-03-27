@@ -35,6 +35,10 @@ export class SessionService {
     return this.http.delete<void>(`${this.base}/${encodeURIComponent(name)}`);
   }
 
+  deleteAllSessions(): Observable<void> {
+    return this.http.delete<void>(this.base);
+  }
+
   parsePairs(pairsJson: string): Pair[] {
     try {
       return JSON.parse(pairsJson);
