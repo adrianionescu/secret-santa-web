@@ -44,4 +44,8 @@ export class FirestoreSessionRepository implements ISessionRepository {
       .get();
     return doc.exists;
   }
+
+  async deleteByName(name: string): Promise<void> {
+    await this.db.collection(this.collectionName).doc(name).delete();
+  }
 }

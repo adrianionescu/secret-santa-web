@@ -36,6 +36,10 @@ export class MongoSessionRepository implements ISessionRepository {
     return count > 0;
   }
 
+  async deleteByName(name: string): Promise<void> {
+    await this.sessionModel.deleteOne({ name }).exec();
+  }
+
   private toModel(doc: SessionDocument): SessionModel {
     return {
       name: doc.name,

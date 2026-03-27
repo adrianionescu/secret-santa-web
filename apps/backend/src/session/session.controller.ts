@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { SessionService } from './session.service';
 
 @Controller('sessions')
@@ -25,5 +25,10 @@ export class SessionController {
   @Post()
   saveSession(@Body() body: { name: string; participants: string[]; pairs: string }) {
     return this.sessionService.saveSession(body.name, body.participants, body.pairs);
+  }
+
+  @Delete(':name')
+  deleteSession(@Param('name') name: string) {
+    return this.sessionService.deleteSession(name);
   }
 }

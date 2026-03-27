@@ -35,6 +35,13 @@ export class SessionListComponent implements OnInit {
     });
   }
 
+  deleteSession(name: string) {
+    this.sessionService.deleteSession(name).subscribe({
+      next: () => this.load(),
+      error: (err) => { this.error = err.message || 'Failed to delete session.'; }
+    });
+  }
+
   parsePairs(pairsJson: string): Pair[] {
     return this.sessionService.parsePairs(pairsJson);
   }

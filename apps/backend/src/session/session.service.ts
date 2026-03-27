@@ -35,6 +35,10 @@ export class SessionService {
     return this.sessionRepository.findMostRecent();
   }
 
+  async deleteSession(name: string): Promise<void> {
+    return this.sessionRepository.deleteByName(name);
+  }
+
   async saveSession(
     name: string,
     participants: string[],
