@@ -36,13 +36,14 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.GAR_HOST }}
 
-      - name: Set image name
-        run: echo "IMAGE=${{ env.GAR_HOST }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPO }}/backend:${{ github.sha }}" >> $GITHUB_ENV
+      - name: Set image tag
+        id: image
+        run: echo "tag=${{ env.GAR_HOST }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPO }}/backend:${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Build and push Backend image
         run: |
-          docker build -f apps/backend/Dockerfile -t $IMAGE .
-          docker push $IMAGE
+          docker build -f apps/backend/Dockerfile -t ${{ steps.image.outputs.tag }} .
+          docker push ${{ steps.image.outputs.tag }}
 
       - name: Deploy Backend to Cloud Run
         id: deploy
@@ -50,7 +51,7 @@ jobs:
         with:
           service: secret-santa-backend
           region: ${{ env.GCP_REGION }}
-          image: ${{ env.IMAGE }}
+          image: ${{ steps.image.outputs.tag }}
           env_vars_file: .env.production.gcp
           env_vars: |
             GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
@@ -84,20 +85,21 @@ jobs:
         run: gcloud auth configure-docker ${{ env.GAR_HOST }}
 
       - name: Set image name
-        run: echo "IMAGE=${{ env.GAR_HOST }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPO }}/web:${{ github.sha }}" >> $GITHUB_ENV
+        id: image
+        run: echo "tag=${{ env.GAR_HOST }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPO }}/web:${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Build and push Web image
         run: |
           docker build -f apps/web/Dockerfile \
             --build-arg BACKEND_URL=${{ needs.deploy-backend.outputs.url }} \
             --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-            -t $IMAGE .
-          docker push $IMAGE
+            -t ${{ steps.image.outputs.tag }} .
+          docker push ${{ steps.image.outputs.tag }}
 
       - name: Deploy Web to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: secret-santa-web
           region: ${{ env.GCP_REGION }}
-          image: ${{ env.IMAGE }}
+          image: ${{ steps.image.outputs.tag }}
           flags: --allow-unauthenticated --port=8080 --memory=256Mi --cpu=1
