@@ -11,4 +11,4 @@ onlyBuiltDependencies:
   - msgpackr-extract
   - nx
   - unrs-resolver
-storeDir: D:/.pnpm-store/v10
+storeDir: ../.pnpm-store/v10
