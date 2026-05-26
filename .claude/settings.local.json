@@ -18,5 +18,9 @@
     "deny": [
       "Bash(git push *)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "mongodb"
+  ],
+  "enableAllProjectMcpServers": true
 }
