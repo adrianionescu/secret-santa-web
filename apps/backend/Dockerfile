@@ -24,9 +24,8 @@ WORKDIR /app
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Copy built output and allowed emails list
+# Copy built output
 COPY --from=builder /app/dist/apps/backend ./
-COPY apps/backend/allowed-emails.txt ./
 
 # Install only production dependencies
 RUN npm install --omit=dev --ignore-scripts

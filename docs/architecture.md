@@ -150,7 +150,7 @@ Backend configuration is read exclusively from environment variables via `proces
 | `PORT` | No | `3000` | Cloud Run env (set automatically by Cloud Run) | HTTP port the backend listens on |
 | `GOOGLE_CLIENT_ID` | Yes | — | `.env.development` / Cloud Run env (from `GOOGLE_CLIENT_ID` GitHub secret) | Google OAuth2 client ID used to verify ID tokens |
 | `JWT_SECRET` | Yes | `dev-secret-change-in-production` | `.env.development` / Cloud Run env (from `JWT_SECRET` GitHub secret) | Signs and verifies session JWTs; must be set in production |
-| `ALLOWED_EMAILS_PATH` | No | `allowed-emails.txt` (relative to cwd) | `.env.development` | Path to the allowlist file; defaults to `allowed-emails.txt` next to the running process |
+| `ALLOWED_EMAILS` | Yes | — (boot fails if unset/empty) | `.env.development` / `.env.production.gcp` (via `deploy_gcp.yml` `env_vars_file`) | Comma-separated, case-insensitive list of Google accounts allowed to sign in |
 
 **How `DB_PROVIDER` controls the adapter** (`repository.module.ts`):
 ```
@@ -175,9 +175,14 @@ The frontend has no runtime environment variables. Configuration is baked in at 
 2. The web `Dockerfile` runs two `sed` commands to replace `__BACKEND_URL__` and `__GOOGLE_CLIENT_ID__` in `environment.prod.ts`.
 3. `nx build` then compiles those values into the Angular bundle.
 
-**Allowed emails file** (`apps/backend/allowed-emails.txt`):
+**Email allowlist** (`ALLOWED_EMAILS`):
 
-The backend reads a plain-text file of permitted Google email addresses at startup. One email per line; lines starting with `#` are ignored. The file is baked into the Docker image at `/app/allowed-emails.txt`. To change the list, update the file and redeploy. The path can be overridden via `ALLOWED_EMAILS_PATH`.
+The backend reads the permitted Google accounts from the `ALLOWED_EMAILS`
+environment variable at startup — a comma-separated, case-insensitive list. It is
+defined per environment in `.env.development` (local) and `.env.production.gcp`
+(GCP, applied via the `env_vars_file` input in `deploy_gcp.yml`). The backend
+fails fast on boot if it is unset or empty. To change the list, edit the relevant
+`.env.*` file and redeploy.
 
 ---
 

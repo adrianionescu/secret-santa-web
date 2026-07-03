@@ -220,6 +220,35 @@ gcloud run deploy secret-santa-web \
 
 ---
 
+## Email allowlist
+
+The Google accounts allowed to sign in are defined **per environment in the
+`.env.*` files**, as a comma-separated, case-insensitive `ALLOWED_EMAILS` list:
+
+- **Local** → `ALLOWED_EMAILS` in `.env.development` (loaded by Nx on `nx serve`)
+- **GCP** → `ALLOWED_EMAILS` in `.env.production.gcp`
+
+`.env.production.gcp` is committed to the repo (it holds no secrets — just
+non-sensitive config) and is applied to the backend Cloud Run service via the
+`env_vars_file:` input of the deploy step in
+[`deploy_gcp.yml`](../.github/workflows/deploy_gcp.yml). Secrets (`JWT_SECRET`,
+`GOOGLE_CLIENT_ID`, `GCP_PROJECT_ID`) are layered on top from GitHub secrets via
+that step's inline `env_vars:`.
+
+```env
+# .env.production.gcp
+ALLOWED_EMAILS=alice@example.com,bob@example.com
+```
+
+To change who can access production, edit `.env.production.gcp`, commit, and push
+to `main` — the redeploy applies it.
+
+> Note: the value is passed through to Cloud Run env vars. Keep it
+> comma-separated on a single line; verify multi-email values survive the
+> `env_vars_file` round-trip after the first deploy.
+
+---
+
 ## Post-Deployment
 
 After the first deployment, get the service URLs:

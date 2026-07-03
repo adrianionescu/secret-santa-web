@@ -1,8 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { OAuth2Client } from 'google-auth-library';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class AuthService {
@@ -15,15 +13,16 @@ export class AuthService {
   }
 
   private loadAllowedEmails(): Set<string> {
-    const filePath = process.env.ALLOWED_EMAILS_PATH
-      ? path.resolve(process.env.ALLOWED_EMAILS_PATH)
-      : path.join(process.cwd(), 'allowed-emails.txt');
+    const emails = (process.env.ALLOWED_EMAILS ?? '')
+      .split(/[,\n]/)
+      .map(e => e.trim().toLowerCase())
+      .filter(e => e.length > 0);
 
-    const content = fs.readFileSync(filePath, 'utf-8');
-    const emails = content
-      .split('\n')
-      .map(l => l.trim())
-      .filter(l => l.length > 0 && !l.startsWith('#'));
+    if (emails.length === 0) {
+      throw new Error(
+        'ALLOWED_EMAILS is not set or empty — define it in the environment (.env.<NODE_ENV>)',
+      );
+    }
 
     return new Set(emails);
   }
@@ -41,7 +40,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Google token');
     }
 
-    if (!email || !this.allowedEmails.has(email)) {
+    if (!email || !this.allowedEmails.has(email.toLowerCase())) {
       throw new UnauthorizedException('Email not allowed');
     }
 

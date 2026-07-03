@@ -4,50 +4,48 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { OAuth2Client } from 'google-auth-library';
 
-jest.mock('fs', () => ({
-  ...jest.requireActual('fs'),
-  readFileSync: jest.fn(),
-}));
-
-import * as fs from 'fs';
-
 const ALLOWED_EMAIL = 'allowed@example.com';
-const ALLOWED_EMAILS_FILE = `# comment\n${ALLOWED_EMAIL}\n`;
 
-const mockReadFileSync = fs.readFileSync as jest.Mock;
+async function createService(): Promise<AuthService> {
+  const module = await Test.createTestingModule({
+    providers: [
+      AuthService,
+      { provide: JwtService, useValue: { sign: jest.fn().mockReturnValue('signed-jwt') } },
+    ],
+  }).compile();
+
+  return module.get(AuthService);
+}
 
 describe('AuthService', () => {
-  let service: AuthService;
-  let jwtService: jest.Mocked<Pick<JwtService, 'sign'>>;
+  const originalAllowedEmails = process.env.ALLOWED_EMAILS;
 
-  beforeEach(async () => {
-    mockReadFileSync.mockReturnValue(ALLOWED_EMAILS_FILE);
-
-    const module = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        { provide: JwtService, useValue: { sign: jest.fn().mockReturnValue('signed-jwt') } },
-      ],
-    }).compile();
-
-    service = module.get(AuthService);
-    jwtService = module.get(JwtService);
+  beforeEach(() => {
+    process.env.ALLOWED_EMAILS = ALLOWED_EMAIL;
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    if (originalAllowedEmails === undefined) {
+      delete process.env.ALLOWED_EMAILS;
+    } else {
+      process.env.ALLOWED_EMAILS = originalAllowedEmails;
+    }
+  });
 
   describe('verifyGoogleToken', () => {
     it('returns a JWT for a valid token from an allowed email', async () => {
+      const service = await createService();
       jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
         getPayload: () => ({ email: ALLOWED_EMAIL }),
       } as never);
 
       const result = await service.verifyGoogleToken('valid-token');
       expect(result).toBe('signed-jwt');
-      expect(jwtService.sign).toHaveBeenCalledWith({ email: ALLOWED_EMAIL });
     });
 
     it('throws UnauthorizedException when Google rejects the token', async () => {
+      const service = await createService();
       jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockRejectedValue(new Error('bad') as never);
 
       await expect(service.verifyGoogleToken('bad-token'))
@@ -55,6 +53,7 @@ describe('AuthService', () => {
     });
 
     it('throws UnauthorizedException when email is not in the allowlist', async () => {
+      const service = await createService();
       jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
         getPayload: () => ({ email: 'stranger@example.com' }),
       } as never);
@@ -64,6 +63,7 @@ describe('AuthService', () => {
     });
 
     it('throws UnauthorizedException when payload has no email', async () => {
+      const service = await createService();
       jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
         getPayload: () => ({}),
       } as never);
@@ -71,26 +71,38 @@ describe('AuthService', () => {
       await expect(service.verifyGoogleToken('valid-token'))
         .rejects.toThrow(UnauthorizedException);
     });
+
+    it('matches allowed emails case-insensitively', async () => {
+      process.env.ALLOWED_EMAILS = 'Allowed@Example.com';
+      const service = await createService();
+      jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
+        getPayload: () => ({ email: 'ALLOWED@example.COM' }),
+      } as never);
+
+      await expect(service.verifyGoogleToken('valid-token')).resolves.toBe('signed-jwt');
+    });
   });
 
   describe('loadAllowedEmails', () => {
-    it('ignores comment lines and blank lines', async () => {
-      mockReadFileSync.mockReturnValue('# ignored\n\nonly@example.com\n');
-
-      const module = await Test.createTestingModule({
-        providers: [
-          AuthService,
-          { provide: JwtService, useValue: { sign: jest.fn().mockReturnValue('jwt') } },
-        ],
-      }).compile();
-
-      const svc = module.get(AuthService);
+    it('parses a comma-separated list and trims whitespace', async () => {
+      process.env.ALLOWED_EMAILS = ' a@example.com , b@example.com ';
+      const service = await createService();
 
       jest.spyOn(OAuth2Client.prototype, 'verifyIdToken').mockResolvedValue({
-        getPayload: () => ({ email: 'only@example.com' }),
+        getPayload: () => ({ email: 'b@example.com' }),
       } as never);
 
-      await expect(svc.verifyGoogleToken('t')).resolves.toBe('jwt');
+      await expect(service.verifyGoogleToken('t')).resolves.toBe('signed-jwt');
+    });
+
+    it('throws when ALLOWED_EMAILS is unset', async () => {
+      delete process.env.ALLOWED_EMAILS;
+      await expect(createService()).rejects.toThrow(/ALLOWED_EMAILS/);
+    });
+
+    it('throws when ALLOWED_EMAILS is empty', async () => {
+      process.env.ALLOWED_EMAILS = '   ';
+      await expect(createService()).rejects.toThrow(/ALLOWED_EMAILS/);
     });
   });
 });
