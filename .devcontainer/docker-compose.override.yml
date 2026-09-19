@@ -1,8 +1,4 @@
 services:
-  app:
-    volumes:
-      - ../../.claude:/home/node/.claude
-      
   db:    
     volumes:
       - ../../_data/mongodb-data:/data/db
