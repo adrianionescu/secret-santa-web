@@ -16,7 +16,6 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"Angular.ng-template",
-				"Anthropic.claude-code",
 				"ms-azuretools.vscode-containers",
 				"docker.docker",
 				"github.vscode-github-actions",
